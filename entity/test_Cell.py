@@ -1,97 +1,123 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat Apr  3 13:17:20 2021
+Edited on Mon Apr 5 14:45:12 2021 by Julien
 
 @author: Julien
 """
 
 from Cell import Cell
-import inspect
-import sys
-import os
-import numpy as np
+import unittest
 
-def unit_test(class_t, expected):
+def tuple_for_testing(model, val, replace_i):
+    """this function creates a tuple by changing only one parameter from a list
+    
+    Positionnal arguments :
+        model -- a list of valid arguments to pass to the object to test
+        val -- the value you want to put in the list
+        replace_i -- the index of the value to be replaced
+    
+    Returns :
+        tuple
     """
-    this function tries different inputs types into the class_t arguments and verifies the output using exeptions
-    
-    inputs :
-        class_t : the class you want to test
-        expected : the array of success that should be encountered
-    """
-    
-    #define different entries to test out
-    entries = {"int" : 1,
-               "negative int":-1,
-               "float" : 1.0,
-               "negative float" : -1.0,
-               "complex" : 1+1j,
-               "string" : "string",
-               "null" : None}
-    
-    param = list(inspect.signature(Cell.__init__).parameters.keys())
-    param.pop(0)
-    
-    min_valid = True #a boolean that keeps track of the minimal validation
-    success = np.full((len(param),len(param)), False) #the list of the tests passed or not
-    
-    with open(f'log_for_{os.path.basename(__file__)[:-3]}.txt', 'w') as f : #open a log file
-        for i in range(len(expected[0])): #iterate over the arguments
-            f.write(5*'-'+f'parameter {param[i]}'+5*'-'+'\n')
-            j=0
-            for entry_t, entry in entries.items() : #iterate over the entries
-                default = [expected[0][i]() for i in range(len(expected[0]))]
-                try :
-                    default[i] = entry
-                    c = class_t(*tuple(default))
-                except Exception as e :
-                    f.write(f'{entry_t} typed entry has raised the following exeption :\n{type(e).__name__} : '+str(e)+'\n\n')
-                    if type(entry)==type(expected[i]) :
-                        min_valid = False
-                        sys.stdout.write(f'argument "{param[i]}" has failed the minimal requirement\n')
-                else :
-                    success[i,j] = True
-                    f.write(f'{entry_t} typed entry has raised no exeption\n\n')
-                finally :
-                    j+=1
-    
-    if min_valid :
-        sys.stdout.write('the function has fulfilled the minimal validation needs\n')
-    
-    for i in range(len(expected[0])):
-        if success[i].all() == np.full(len(param), True).all() :
-            sys.stdout.write(f'Warning : the parameter "{param[i]}" has not been restrained\n')
+    m_copy = model.copy()
+    m_copy[replace_i]=val
+    return tuple(m_copy)
 
+#testing class
+class test_Cell_c(unittest.TestCase):
+    
+    #this is a default input that should not raise Errors
+    #We will test every argument of the Cell by modifying this list of arguments before feeding it to the asserRaises method
+    default = [1, 1, 1.0, 1.0, 10.0, 15.0, None]
+    
+    """the process could be iterated over but i prefer not to do so because in general it shouldn't be"""
+    
+    #♠testing the types of the arguments
+    def test_type_xcoord(self):
+        arg_n = 0
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, [], arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, (1,), arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1+2j, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, True, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, None, arg_n))
+    
+    def test_type_ycoord(self):
+        arg_n = 1
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, [], arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, (1,), arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1+2j, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, True, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, None, arg_n))
+    
+    def test_type_xcomp(self):
+        arg_n = 2
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, [], arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, (1,), arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1+2j, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, True, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, None, arg_n))
+        
+    def test_type_ycomp(self):
+        arg_n = 3
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, [], arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, (1,), arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1+2j, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, True, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, None, arg_n))
+    
+    def test_type_dtofirst(self):
+        arg_n = 4
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, [], arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, (1,), arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1+2j, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, True, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, None, arg_n))
+    
+    def test_type_dtoend(self):
+        arg_n = 5
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, [], arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, (1,), arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1+2j, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, True, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, None, arg_n))
+    
+    def test_type_parent(self):
+        arg_n = 6
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1.0, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, [], arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, (1,), arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, 1+2j, arg_n))
+        self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, True, arg_n))
+    
+    #testing the values for the heuristic parameters
+    def test_value_dtofirst(self):
+        arg_n = 4
+        self.assertRaises(ValueError, Cell, *tuple_for_testing(self.default, -1, arg_n))
+        self.assertRaises(ValueError, Cell, *tuple_for_testing(self.default, -1.0, arg_n))
+    
+    def test_value_dtoend(self):
+        arg_n = 5
+        self.assertRaises(ValueError, Cell, *tuple_for_testing(self.default, -1, arg_n))
+        self.assertRaises(ValueError, Cell, *tuple_for_testing(self.default, -1.0, arg_n))
 
 if __name__ == '__main__' :
     c1 = Cell(5, 3, 1.0, 1.0, 10.0, 15.0, None)
     print(c1)
     print(c1.getCoords())
     print(c1.getV())
-    print(c1.getNb())
+    print(c1.getF())
+    print(c1.getG())
+    print(c1.getH())
+    print(c1.getParent())
     
-    expected = [[int, int, float, float, complex, str, Cell],
-                [True, False, False, False, False, False, False],
-                [True, False, False, False, False, False, False],
-                [False, False, True, True, False, False, False],
-                [False, False, True, True, False, False, False],
-                [False, False, True, False, False, False, False],
-                [False, False, True, False, False, False, False],
-                [False, False, True, False, False, False, False]]
-    
-    unit_test(Cell, expected)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    c2 = Cell(3, 5, 1.0, 1.0, 10.0, 12.0, c1)
+    print(c2.getParent().getCoords())
