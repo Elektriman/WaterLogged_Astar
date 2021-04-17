@@ -33,7 +33,7 @@ class test_Cell_c(unittest.TestCase):
     
     """the process could be iterated over but i prefer not to do so because in general it shouldn't be"""
     
-    #♠testing the types of the arguments
+    #testing the types of the arguments
     def test_type_xcoord(self):
         arg_n = 0
         self.assertRaises(TypeError, Cell, *tuple_for_testing(self.default, "string", arg_n))
