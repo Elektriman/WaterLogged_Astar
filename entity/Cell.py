@@ -113,7 +113,6 @@ class Cell :
         Returns
         -------
         tuple (x,y)
-
         """
         return((self.x,self.y))
 
@@ -124,7 +123,6 @@ class Cell :
         Returns
         -------
         tuple (vx,vy)
-
         """
         return((self.vx,self.vy))
     
@@ -137,7 +135,6 @@ class Cell :
         -------
         int or float
             distance to the first cell
-
         """
         return self.dtf
     
@@ -149,7 +146,6 @@ class Cell :
         -------
         int or float
             distance to the end cell
-
         """
         return self.dte
     
@@ -161,7 +157,6 @@ class Cell :
         -------
         int or float
             distance to the first cell + distance to the last cell
-
         """
         return self.h
     
@@ -173,7 +168,6 @@ class Cell :
         -------
         Cell or None
             parent cell. None returned only in the case of this method performed onto the first cell
-
         """
         return self.parent
 
